@@ -119,13 +119,16 @@ class GPTResearcher:
         # Get Urls
         retriever = self.retriever(sub_query)
         search_results = retriever.search(max_results=self.cfg.max_search_results_per_query)
-        new_search_urls = await self.get_new_urls([url.get("href") for url in search_results])
 
-        # Scrape Urls
-        # await stream_output("logs", f"📝Scraping urls {new_search_urls}...\n", self.websocket)
-        await stream_output("logs", f"🤔Researching for relevant information...\n", self.websocket)
+        new_search_urls = []
+        for item in search_results:
+            if isinstance(item, dict) and 'href' in item:
+                new_search_urls.append(item['href'])
+
+        await stream_output("logs", f"🤔 Researching for relevant information...\n", self.websocket)
         scraped_content_results = scrape_urls(new_search_urls, self.cfg)
         return scraped_content_results
+
 
     async def get_similar_content_by_query(self, query, pages):
         await stream_output("logs", f"📃 Getting relevant content based on query: {query}...", self.websocket)

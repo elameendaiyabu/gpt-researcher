@@ -46,6 +46,7 @@ class TavilySearch():
             # Return the results
             search_response = [{"href": obj["url"], "body": obj["content"]} for obj in results.get("results", [])]
         except Exception as e: # Fallback in case overload on Tavily Search API
-            ddg = DDGS()
-            search_response = ddg.text(self.query, region='wt-wt', max_results=max_results)
+            # ddg = DDGS()
+            # search_response = ddg.text(self.query, region='wt-wt', max_results=max_results)
+            search_response=("case overload")
         return search_response
